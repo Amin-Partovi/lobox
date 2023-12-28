@@ -1,6 +1,12 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+![How the project works](./src/assets/screencast.gif)
+
+# About the project
+
+This app was developed based on the design and required functionality provided in the assignment description. No package or library was used for styling and all the styles and components were developed from scratch.
+
+It's worth noting that due to time constraints, tests were only written for specific cases, and not all aspects of the project were covered.
 
 ## Available Scripts
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import styles from "./multi-select-dropdown-display.module.scss";
+import styles from "./multi-select-display.module.scss";
 
 const NUM_TO_SHOW = 3;
 
@@ -40,6 +40,7 @@ const MultiSelectDropdownDisplay = ({
 
   return (
     <div
+      data-testid="selected-options"
       className={`${styles["selected-options"]} ${
         isHidden ? styles.hidden : ""
       }`}

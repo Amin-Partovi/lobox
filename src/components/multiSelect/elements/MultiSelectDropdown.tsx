@@ -14,7 +14,10 @@ const MultiSelectDropdown = ({
   selectedOptions: string[];
 }) => {
   return (
-    <div className={`${styles["dropdown-container"]} `}>
+    <div
+      className={`${styles["dropdown-container"]} `}
+      data-testid="multi-select-dropdown"
+    >
       <ul className={`${styles["option-list"]} fancy-scrollbar`}>
         {options.map((option) => (
           <li

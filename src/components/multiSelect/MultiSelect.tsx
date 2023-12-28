@@ -1,7 +1,7 @@
 import { ChevronDown, LaughIcon } from "lucide-react";
 import React, { Suspense, useEffect, useRef } from "react";
 
-import MultiSelectDropdownDisplay from "./elements/MultiSelectDropdownDisplay";
+import MultiSelectDisplay from "./elements/MultiSelectDisplay";
 import useDropdownFilter from "./hooks/useDropdownFilter";
 import useDropdownToggle from "./hooks/useDropdownToggle";
 import { MultiSelectProps } from "./types";
@@ -67,6 +67,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           className={styles.laugh}
           width={20}
           height={20}
+          data-testid="laugh-icon"
         />
 
         <ChevronDown
@@ -74,9 +75,10 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           width={20}
           height={20}
           onClick={toggleDropdown}
+          data-testid="chevron-down-icon"
         />
 
-        <MultiSelectDropdownDisplay
+        <MultiSelectDisplay
           onClick={handleOpenDropdown}
           isHidden={isDropdownOpen || isEmojiPickerOpen}
           placeholder={placeholder}
