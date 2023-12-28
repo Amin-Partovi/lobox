@@ -1,18 +1,21 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, LaughIcon } from "lucide-react";
 import React, {
   ChangeEvent,
   KeyboardEvent,
+  Suspense,
   useCallback,
   useEffect,
   useRef,
   useState,
   useTransition,
 } from "react";
+import MultiSelectDropdownDisplay from "./MultiSelectDropdownDisplay";
 import MultiSelectDropdownOption from "./MultiSelectDropdownOption";
 import styles from "./multi-select-dropdown.module.scss";
-import { MultiSelectDropdownProps } from "./types";
+import { EmojiClickValue, MultiSelectDropdownProps } from "./types";
 import useDropdown from "./useDropdown";
-import MultiSelectDropdownDisplay from "./MultiSelectDropdownDisplay";
+
+const EmojiPicker = React.lazy(() => import("emoji-picker-react"));
 
 const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   options,
@@ -20,8 +23,14 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
 }) => {
   const startTransition = useTransition()[1];
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const { isDropdownOpen, toggleDropdown, handleOpenDropdown, ref } =
-    useDropdown();
+  const {
+    isDropdownOpen,
+    toggleDropdown,
+    handleOpenDropdown,
+    ref,
+    isEmojiPickerOpen,
+    toggleEmojiPicker,
+  } = useDropdown();
   const [_options, setOptions] = useState<string[]>([]);
   const [optionsToShow, setOptionsToShow] = useState<string[]>([]);
   const [term, setTerm] = useState<string>("");
@@ -74,44 +83,66 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
     [selectedOptions, _options]
   );
 
+  function handleClickEmoji(value: EmojiClickValue) {
+    setTerm((term) => term + value.emoji);
+  }
+
   return (
-    <div className={styles["multi-select-dropdown"]} ref={ref}>
-      <input
-        onClick={handleOpenDropdown}
-        className={styles.input}
-        value={term}
-        onChange={handleChangeInput}
-        onKeyDown={handleKeyDown}
-        ref={inputRef}
-      />
+    <>
+      <div className={styles["multi-select-dropdown"]} ref={ref}>
+        <input
+          onClick={handleOpenDropdown}
+          className={styles.input}
+          value={term}
+          onChange={handleChangeInput}
+          onKeyDown={handleKeyDown}
+          ref={inputRef}
+        />
 
-      <ChevronDown
-        className={styles["chevron"]}
-        width={20}
-        height={20}
-        onClick={toggleDropdown}
-      />
+        <LaughIcon
+          onClick={toggleEmojiPicker}
+          className={styles.laugh}
+          width={20}
+          height={20}
+        />
 
-      <MultiSelectDropdownDisplay
-        onClick={handleOpenDropdown}
-        isHidden={isDropdownOpen}
-        placeholder={placeholder}
-        selectedOptions={selectedOptions}
-      />
+        <ChevronDown
+          className={styles["chevron"]}
+          width={20}
+          height={20}
+          onClick={toggleDropdown}
+        />
 
-      {isDropdownOpen ? (
-        <ul className={styles["dropdown-container"]}>
-          {optionsToShow.map((option) => (
-            <MultiSelectDropdownOption
-              onClick={handleOptionClick}
-              option={option}
-              selectedOptions={selectedOptions}
-              key={option}
+        <MultiSelectDropdownDisplay
+          onClick={handleOpenDropdown}
+          isHidden={isDropdownOpen || isEmojiPickerOpen}
+          placeholder={placeholder}
+          selectedOptions={selectedOptions}
+        />
+
+        {isDropdownOpen ? (
+          <ul className={styles["dropdown-container"]}>
+            {optionsToShow.map((option) => (
+              <MultiSelectDropdownOption
+                onClick={handleOptionClick}
+                option={option}
+                selectedOptions={selectedOptions}
+                key={option}
+              />
+            ))}
+          </ul>
+        ) : null}
+
+        <Suspense>
+          {isEmojiPickerOpen ? (
+            <EmojiPicker
+              onEmojiClick={handleClickEmoji}
+              style={{ position: "absolute", top: "50px" }}
             />
-          ))}
-        </ul>
-      ) : null}
-    </div>
+          ) : null}
+        </Suspense>
+      </div>
+    </>
   );
 };
 

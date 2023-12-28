@@ -3,13 +3,14 @@ import React from "react";
 import MultiSelectDropdown from "./components/multiSelectDropDown/MultiSelectDropdown";
 
 const options = [
-  "Option 1",
-  "Option 2",
-  "Option 3",
-  "Option 4",
-  "Option 5",
-  "Option 6",
-  "Option 7",
+  "Education 📚",
+  "Yeeeah Science! 🏫",
+  "Art 👩‍🎨",
+  "Sport ⚽",
+  "Games 🎮",
+  "Health 🩺",
+  "Movie 🎥",
+  "Music 🎵",
 ];
 
 function App() {

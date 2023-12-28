@@ -5,16 +5,24 @@ const useDropdown = (): {
   toggleDropdown: () => void;
   ref: RefObject<HTMLDivElement>;
   handleOpenDropdown: () => void;
+  isEmojiPickerOpen: boolean;
+  toggleEmojiPicker: () => void;
 } => {
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
 
   function toggleDropdown() {
     setDropdownOpen(!isDropdownOpen);
   }
 
+  function toggleEmojiPicker() {
+    setIsEmojiPickerOpen(!isEmojiPickerOpen);
+  }
+
   function handleOpenDropdown() {
     setDropdownOpen(true);
+    setIsEmojiPickerOpen(false);
   }
 
   function clickEventListenerCallback(
@@ -24,6 +32,7 @@ const useDropdown = (): {
     if (event.target && ref.current) {
       if (!ref.current.contains(event.target as Node)) {
         setDropdownOpen(false);
+        setIsEmojiPickerOpen(false);
       }
     }
   }
@@ -40,7 +49,18 @@ const useDropdown = (): {
     };
   }, []);
 
-  return { toggleDropdown, isDropdownOpen, ref, handleOpenDropdown };
+  useEffect(() => {
+    if (isEmojiPickerOpen) setDropdownOpen(false);
+  }, [isEmojiPickerOpen]);
+
+  return {
+    toggleDropdown,
+    isDropdownOpen,
+    ref,
+    handleOpenDropdown,
+    toggleEmojiPicker,
+    isEmojiPickerOpen,
+  };
 };
 
 export default useDropdown;

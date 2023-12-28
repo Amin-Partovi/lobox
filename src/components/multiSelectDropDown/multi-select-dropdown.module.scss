@@ -3,6 +3,13 @@
   width: 100%;
   color: var(--gray-dark);
 
+  .laugh {
+    position: absolute;
+    right: 60px;
+    top: 10px;
+    cursor: pointer;
+  }
+
   .chevron {
     position: absolute;
     right: 20px;
@@ -27,12 +34,13 @@
   }
 
   .dropdown-container {
+    top: 0;
     width: 100%;
     min-height: 200px;
     max-height: 300px;
     border: 1px solid var(--gray-normal);
     position: absolute;
-    margin-top: 16px;
+    margin-top: 60px;
     display: flex;
     flex-direction: column;
     gap: 10px;
