@@ -2,16 +2,16 @@ import { ChevronDown, LaughIcon } from "lucide-react";
 import React, { Suspense, useEffect, useRef } from "react";
 
 import MultiSelectDropdownDisplay from "./elements/MultiSelectDropdownDisplay";
-import MultiSelectDropdownOption from "./elements/MultiSelectDropdownOption";
-import { MultiSelectDropdownProps } from "./types";
 import useDropdownFilter from "./hooks/useDropdownFilter";
 import useDropdownToggle from "./hooks/useDropdownToggle";
+import { MultiSelectDropdownProps } from "./types";
+import MultiSelectDropdown from "./elements/MultiSelectDropdown";
 
-import styles from "./multi-select-dropdown.module.scss";
+import styles from "./multi-select.module.scss";
 
 const EmojiPicker = React.lazy(() => import("emoji-picker-react"));
 
-const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
+const MultiSelect: React.FC<MultiSelectDropdownProps> = ({
   options,
   placeholder,
   initialValue,
@@ -50,7 +50,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
 
   return (
     <>
-      <div className={styles["multi-select-dropdown"]} ref={ref}>
+      <div className={styles["multi-select"]} ref={ref}>
         <input
           onClick={handleOpenDropdown}
           className={styles.input}
@@ -82,16 +82,11 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
         />
 
         {isDropdownOpen ? (
-          <ul className={styles["dropdown-container"]}>
-            {optionsToShow.map((option) => (
-              <MultiSelectDropdownOption
-                onClick={onOptionClick}
-                option={option}
-                selectedOptions={selectedOptions}
-                key={option}
-              />
-            ))}
-          </ul>
+          <MultiSelectDropdown
+            options={optionsToShow}
+            onClick={onOptionClick}
+            selectedOptions={selectedOptions}
+          />
         ) : null}
 
         <Suspense>
@@ -107,4 +102,4 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   );
 };
 
-export default MultiSelectDropdown;
+export default MultiSelect;

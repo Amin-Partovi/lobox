@@ -34,3 +34,22 @@ body,
 #root {
   height: 100%;
 }
+
+.fancy-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.fancy-scrollbar::-webkit-scrollbar-track {
+  border-radius: 20px;
+  background: transparent;
+}
+
+.fancy-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--gray-normal);
+  border-radius: 20px;
+}
+
+.fancy-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-dark);
+}

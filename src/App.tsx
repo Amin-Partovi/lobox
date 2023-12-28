@@ -1,6 +1,6 @@
 import styles from "./app.module.scss";
 import React from "react";
-import MultiSelectDropdown from "./components/multiSelectDropDown/MultiSelectDropdown";
+import MultiSelect from "./components/multiSelect/MultiSelect";
 
 const options = [
   "Education 📚",
@@ -20,7 +20,7 @@ function App() {
   return (
     <div className={styles["app"]}>
       <div className={styles["form"]}>
-        <MultiSelectDropdown
+        <MultiSelect
           options={options}
           placeholder="select something"
           initialValue={["Sport ⚽", "Games 🎮", "Health 🩺"]}
