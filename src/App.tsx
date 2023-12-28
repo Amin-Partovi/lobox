@@ -14,10 +14,18 @@ const options = [
 ];
 
 function App() {
+  const handleChange = (value: string[]) => {
+    console.log(value);
+  };
   return (
     <div className={styles["app"]}>
       <div className={styles["form"]}>
-        <MultiSelectDropdown options={options} placeholder="select something" />
+        <MultiSelectDropdown
+          options={options}
+          placeholder="select something"
+          initialValue={["Sport ⚽", "Games 🎮", "Health 🩺"]}
+          onChange={handleChange}
+        />
       </div>
     </div>
   );

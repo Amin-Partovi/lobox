@@ -1,11 +1,11 @@
 .app {
   display: flex;
   justify-content: center;
-  align-items: center;
   background-color: var(--gray-light);
   height: 100%;
 
   .form {
-    width: 400px;
+    margin-top: 200px;
+    width: 500px;
   }
 }

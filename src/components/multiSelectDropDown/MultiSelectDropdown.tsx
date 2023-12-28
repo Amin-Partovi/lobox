@@ -1,28 +1,23 @@
 import { ChevronDown, LaughIcon } from "lucide-react";
-import React, {
-  ChangeEvent,
-  KeyboardEvent,
-  Suspense,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
-import MultiSelectDropdownDisplay from "./MultiSelectDropdownDisplay";
-import MultiSelectDropdownOption from "./MultiSelectDropdownOption";
+import React, { Suspense, useEffect, useRef } from "react";
+
+import MultiSelectDropdownDisplay from "./elements/MultiSelectDropdownDisplay";
+import MultiSelectDropdownOption from "./elements/MultiSelectDropdownOption";
+import { MultiSelectDropdownProps } from "./types";
+import useDropdownFilter from "./hooks/useDropdownFilter";
+import useDropdownToggle from "./hooks/useDropdownToggle";
+
 import styles from "./multi-select-dropdown.module.scss";
-import { EmojiClickValue, MultiSelectDropdownProps } from "./types";
-import useDropdown from "./useDropdown";
 
 const EmojiPicker = React.lazy(() => import("emoji-picker-react"));
 
 const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   options,
   placeholder,
+  initialValue,
+  onChange,
 }) => {
-  const startTransition = useTransition()[1];
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  // this custom hook handle open and close state of the dropdown options and emoji picker
   const {
     isDropdownOpen,
     toggleDropdown,
@@ -30,62 +25,28 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
     ref,
     isEmojiPickerOpen,
     toggleEmojiPicker,
-  } = useDropdown();
-  const [_options, setOptions] = useState<string[]>([]);
-  const [optionsToShow, setOptionsToShow] = useState<string[]>([]);
-  const [term, setTerm] = useState<string>("");
+  } = useDropdownToggle();
+
+  // this custom hook handle the value of the input, filter options, and select option
+  const {
+    term,
+    onInputChange,
+    onKeyDown,
+    selectedOptions,
+    onOptionClick,
+    onEmojiClick,
+    optionsToShow,
+  } = useDropdownFilter({ options, initialValue });
+
   const inputRef = useRef<HTMLInputElement>(null);
-
-  function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value;
-    setTerm(value);
-    startTransition(() => {
-      setOptionsToShow(
-        _options.filter((option) =>
-          option.toLowerCase().includes(value.toLowerCase())
-        )
-      );
-    });
-  }
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      if (!optionsToShow.includes(term)) {
-        setOptions([term, ..._options]);
-        setOptionsToShow([term, ..._options]);
-      }
-      setSelectedOptions([...selectedOptions, term]);
-      setTerm("");
-    }
-  };
-
-  useEffect(() => {
-    setOptions(options);
-    setOptionsToShow(options);
-  }, [options]);
 
   useEffect(() => {
     if (isDropdownOpen && inputRef.current) inputRef.current.focus();
   }, [isDropdownOpen]);
 
-  const handleOptionClick = useCallback(
-    (option: string) => {
-      setTerm("");
-      setOptionsToShow(_options);
-      if (selectedOptions.includes(option)) {
-        setSelectedOptions(
-          selectedOptions.filter((selected) => selected !== option)
-        );
-      } else {
-        setSelectedOptions([...selectedOptions, option]);
-      }
-    },
-    [selectedOptions, _options]
-  );
-
-  function handleClickEmoji(value: EmojiClickValue) {
-    setTerm((term) => term + value.emoji);
-  }
+  useEffect(() => {
+    onChange(selectedOptions);
+  }, [selectedOptions]);
 
   return (
     <>
@@ -94,8 +55,8 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           onClick={handleOpenDropdown}
           className={styles.input}
           value={term}
-          onChange={handleChangeInput}
-          onKeyDown={handleKeyDown}
+          onChange={onInputChange}
+          onKeyDown={onKeyDown}
           ref={inputRef}
         />
 
@@ -107,7 +68,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
         />
 
         <ChevronDown
-          className={styles["chevron"]}
+          className={styles.chevron}
           width={20}
           height={20}
           onClick={toggleDropdown}
@@ -124,7 +85,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           <ul className={styles["dropdown-container"]}>
             {optionsToShow.map((option) => (
               <MultiSelectDropdownOption
-                onClick={handleOptionClick}
+                onClick={onOptionClick}
                 option={option}
                 selectedOptions={selectedOptions}
                 key={option}
@@ -136,8 +97,8 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
         <Suspense>
           {isEmojiPickerOpen ? (
             <EmojiPicker
-              onEmojiClick={handleClickEmoji}
-              style={{ position: "absolute", top: "50px" }}
+              onEmojiClick={onEmojiClick}
+              className={styles["emoji-picker"]}
             />
           ) : null}
         </Suspense>

@@ -17,6 +17,17 @@ const MultiSelectDropdownDisplay = ({
 }) => {
   const numberOfSelectedOptions = selectedOptions.length;
 
+  // displaying at most NUM_TO_SHOW of selected options
+  const listOfOptions = () => {
+    return selectedOptions.slice(0, NUM_TO_SHOW).map((item, index, arr) => (
+      <span key={item}>
+        {item}
+        {index !== arr.length - 1 ? "," : ""} &nbsp;
+      </span>
+    ));
+  };
+
+  // e.g. 3 others
   const extraOptions = () => {
     return (
       <span>
@@ -36,12 +47,7 @@ const MultiSelectDropdownDisplay = ({
     >
       {numberOfSelectedOptions ? (
         <>
-          {selectedOptions.slice(0, NUM_TO_SHOW).map((item, index, arr) => (
-            <span key={item}>
-              {item}
-              {index !== arr.length - 1 ? "," : ""} &nbsp;
-            </span>
-          ))}
+          {listOfOptions()}
 
           {extraOptions()}
         </>

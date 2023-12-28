@@ -1,41 +1,36 @@
 import { RefObject, useEffect, useRef, useState } from "react";
+import { useDropdownToggleOutput } from "../types";
 
-const useDropdown = (): {
-  isDropdownOpen: boolean;
-  toggleDropdown: () => void;
-  ref: RefObject<HTMLDivElement>;
-  handleOpenDropdown: () => void;
-  isEmojiPickerOpen: boolean;
-  toggleEmojiPicker: () => void;
-} => {
+const useDropdownToggle = (): useDropdownToggleOutput => {
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  function toggleDropdown() {
+  const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
-  }
+  };
 
-  function toggleEmojiPicker() {
+  const toggleEmojiPicker = () => {
     setIsEmojiPickerOpen(!isEmojiPickerOpen);
-  }
+  };
 
-  function handleOpenDropdown() {
+  const handleOpenDropdown = () => {
     setDropdownOpen(true);
     setIsEmojiPickerOpen(false);
-  }
+  };
 
-  function clickEventListenerCallback(
+  // clicking outside of the multi select dropdown close both dropdown and emoji picker
+  const clickEventListenerCallback = (
     event: MouseEvent,
     ref: RefObject<HTMLDivElement>
-  ) {
+  ) => {
     if (event.target && ref.current) {
       if (!ref.current.contains(event.target as Node)) {
         setDropdownOpen(false);
         setIsEmojiPickerOpen(false);
       }
     }
-  }
+  };
 
   useEffect(() => {
     document.addEventListener("click", (event: MouseEvent) => {
@@ -49,6 +44,7 @@ const useDropdown = (): {
     };
   }, []);
 
+  // close dropdown when the emoji picker is open
   useEffect(() => {
     if (isEmojiPickerOpen) setDropdownOpen(false);
   }, [isEmojiPickerOpen]);
@@ -63,4 +59,4 @@ const useDropdown = (): {
   };
 };
 
-export default useDropdown;
+export default useDropdownToggle;
