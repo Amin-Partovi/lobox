@@ -15,6 +15,12 @@
     right: 20px;
     top: 10px;
     cursor: pointer;
+    z-index: 10;
+    transition: transform 0.5s;
+
+    &.rotate {
+      transform: rotate(180deg);
+    }
   }
 
   .input {

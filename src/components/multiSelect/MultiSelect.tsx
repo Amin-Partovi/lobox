@@ -4,14 +4,16 @@ import React, { Suspense, useEffect, useRef } from "react";
 import MultiSelectDropdownDisplay from "./elements/MultiSelectDropdownDisplay";
 import useDropdownFilter from "./hooks/useDropdownFilter";
 import useDropdownToggle from "./hooks/useDropdownToggle";
-import { MultiSelectDropdownProps } from "./types";
-import MultiSelectDropdown from "./elements/MultiSelectDropdown";
+import { MultiSelectProps } from "./types";
 
 import styles from "./multi-select.module.scss";
 
 const EmojiPicker = React.lazy(() => import("emoji-picker-react"));
+const MultiSelectDropdown = React.lazy(
+  () => import("./elements/MultiSelectDropdown")
+);
 
-const MultiSelect: React.FC<MultiSelectDropdownProps> = ({
+const MultiSelect: React.FC<MultiSelectProps> = ({
   options,
   placeholder,
   initialValue,
@@ -68,7 +70,7 @@ const MultiSelect: React.FC<MultiSelectDropdownProps> = ({
         />
 
         <ChevronDown
-          className={styles.chevron}
+          className={`${styles.chevron} ${isDropdownOpen ? styles.rotate : ""}`}
           width={20}
           height={20}
           onClick={toggleDropdown}
@@ -80,16 +82,15 @@ const MultiSelect: React.FC<MultiSelectDropdownProps> = ({
           placeholder={placeholder}
           selectedOptions={selectedOptions}
         />
-
-        {isDropdownOpen ? (
-          <MultiSelectDropdown
-            options={optionsToShow}
-            onClick={onOptionClick}
-            selectedOptions={selectedOptions}
-          />
-        ) : null}
-
         <Suspense>
+          {isDropdownOpen ? (
+            <MultiSelectDropdown
+              options={optionsToShow}
+              onClick={onOptionClick}
+              selectedOptions={selectedOptions}
+            />
+          ) : null}
+
           {isEmojiPickerOpen ? (
             <EmojiPicker
               onEmojiClick={onEmojiClick}

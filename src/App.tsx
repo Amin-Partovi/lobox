@@ -23,7 +23,7 @@ function App() {
         <MultiSelect
           options={options}
           placeholder="select something"
-          initialValue={["Sport ⚽", "Games 🎮", "Health 🩺"]}
+          initialValue={["Sport ⚽", "Health 🩺"]}
           onChange={handleChange}
         />
       </div>

@@ -1,7 +1,7 @@
 import { EmojiStyle } from "emoji-picker-react";
 import { SkinTones } from "emoji-picker-react";
 import { ChangeEvent, KeyboardEvent, RefObject } from "react";
-export interface MultiSelectDropdownProps {
+export interface MultiSelectProps {
   options: string[];
   placeholder?: string;
   initialValue: string[];
